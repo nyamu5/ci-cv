@@ -12,7 +12,7 @@ When a user asks you to "do the next ticket" or similar, read `.agents/project-s
 
 ## Target stack
 
-pnpm · Next.js 16 (App Router, React 19) · TypeScript strict (`noUncheckedIndexedAccess: true`) · shadcn/ui (base-nova preset, `@base-ui/react`) · Tailwind v4 · Biome · TanStack Form · Zod · Drizzle ORM · Supabase (Postgres + Auth) · OpenAI (GPT-4o-mini + GPT-4o) via Helicone proxy · Trigger.dev v3 · Upstash Redis · pdf-parse · Railway.
+pnpm · Next.js 16 (App Router, React 19) · TypeScript strict (`noUncheckedIndexedAccess: true`) · shadcn/ui (base-nova preset, `@base-ui/react`) · Tailwind v4 · Biome · TanStack Form · Zod · Drizzle ORM · Supabase (Postgres + Auth) · OpenAI (GPT-4o-mini + GPT-4o) traced via LangSmith · Trigger.dev v3 · Upstash Redis · pdf-parse · Railway.
 
 Note: the ticket text says "Next.js 14" but `create-next-app@latest` installs Next 16 + React 19; the architecture and patterns in the spec all still apply. Toasts use `sonner` (the shadcn replacement for the deprecated `toast` component).
 
@@ -36,7 +36,7 @@ Note: the ticket text says "Next.js 14" but `create-next-app@latest` installs Ne
 1. **Gatekeeper** — `gpt-4o-mini`, temp 0, JSON mode. Classifies the document, detects prompt-injection, extracts metadata (name, role, years, top skills). Validated by `GatekeeperSchema`. Cheap fail-fast layer.
 2. **Analyser** — `gpt-4o`, temp 0.3, JSON mode. Receives the gatekeeper's metadata in its system prompt and produces the full scored analysis. Validated by `AnalysisSchema`.
 
-Both calls go through the Helicone proxy (`baseURL: https://oai.helicone.ai/v1`) with `Helicone-Property-Stage` headers so each stage is observable separately. On Zod validation failure throw a typed `AIValidationError` carrying the raw response — never leak it to the user.
+Both calls are traced via LangSmith — the OpenAI client is wrapped with the `langsmith` SDK (`wrapOpenAI`) and each call is tagged with a `stage` metadata field (`gatekeeper` / `analyser`) so each stage is observable separately in the LangSmith project named by `LANGSMITH_PROJECT`. Use the standard OpenAI `baseURL` (no proxy). On Zod validation failure throw a typed `AIValidationError` carrying the raw response — never leak it to the user.
 
 **Persistence.** Single `analyses` table (Drizzle, `lib/db/schema.ts`) with a `pgEnum` status (`pending` | `processing` | `complete` | `failed`), nullable `user_id` (anonymous analyses allowed), `cv_text`, `jd_text`, `target_role`, `result jsonb`, `cost_usd numeric(10,6)`, timestamps. The Trigger task is the only writer for status transitions after insert.
 

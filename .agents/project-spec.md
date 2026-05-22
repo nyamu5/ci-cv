@@ -22,7 +22,7 @@ The full text of each ticket lives in `.agents/tickets/`. This file is the index
 
 pnpm · Next.js 14 (App Router) · TypeScript (strict) · shadcn/ui · Tailwind ·
 Biome · TanStack Form · Zod · Drizzle ORM · Supabase (Postgres + Auth) ·
-OpenAI GPT-4o Mini + GPT-4o · Helicone · Trigger.dev v3 · Upstash Redis ·
+OpenAI GPT-4o Mini + GPT-4o · LangSmith · Trigger.dev v3 · Upstash Redis ·
 pdf-parse · Railway
 
 ---
@@ -43,7 +43,7 @@ pdf-parse · Railway
 - [2.1 — PDF Parsing with Garble Detection + Tests](tickets/2.1-pdf-parsing.md)
 - [2.2 — Rate Limiting with Upstash Redis](tickets/2.2-rate-limiting.md)
 - [2.3 — Cost Estimation Helper + Tests](tickets/2.3-cost-estimation.md)
-- [2.4 — OpenAI Multi-Model Pipeline (Helicone)](tickets/2.4-openai-pipeline.md)
+- [2.4 — OpenAI Multi-Model Pipeline (LangSmith)](tickets/2.4-openai-pipeline.md)
 - [2.5 — Trigger.dev Background Job](tickets/2.5-trigger-job.md)
 - [2.6 — Analyse & Polling API Routes](tickets/2.6-api-routes.md)
 

@@ -1,2 +1,2 @@
-// TODO: implement in Ticket 2.4 — Helicone-proxied gatekeeperCheck + analyseCV.
+// TODO: implement in Ticket 2.4 — LangSmith-traced gatekeeperCheck + analyseCV.
 export {};
