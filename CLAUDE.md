@@ -50,6 +50,10 @@ Both calls go through the Helicone proxy (`baseURL: https://oai.helicone.ai/v1`)
 
 **OG images.** `app/analysis/[id]/opengraph-image.tsx` via `next/og` `ImageResponse`. **Do not** set `runtime = 'edge'` — deploy target is Railway (Node.js). Inline styles only (no Tailwind).
 
+## Commit conventions
+
+**Never add a `Co-Authored-By: Claude …` trailer (or any AI-attribution trailer) to commit messages in this repo.** Use only the subject line specified in each ticket's "Commit" block. If you've already committed with the trailer, rebuild the commit before the user sees it.
+
 ## Workflow conventions from the spec
 
 - TypeScript strict + `noUncheckedIndexedAccess` are non-negotiable. Don't relax tsconfig to make errors go away.
