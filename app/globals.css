@@ -1,26 +1,211 @@
 @import "tailwindcss";
 
+/* ── shadcn CSS variable overrides (HSL space-separated, hsl() applied below) ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 120 27% 4%;
+  --foreground: 142 70% 55%;
+  --card: 120 25% 5%;
+  --card-foreground: 142 70% 55%;
+  --popover: 120 25% 5%;
+  --popover-foreground: 142 70% 55%;
+  --primary: 142 70% 55%;
+  --primary-foreground: 120 27% 4%;
+  --secondary: 120 20% 8%;
+  --secondary-foreground: 142 40% 40%;
+  --muted: 120 15% 7%;
+  --muted-foreground: 142 25% 35%;
+  --accent: 142 50% 36%;
+  --accent-foreground: 142 70% 80%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 142 30% 12%;
+  --input: 120 20% 8%;
+  --ring: 142 70% 55%;
+  --radius: 0rem;
 }
 
+/* Expose shadcn vars + the JetBrains Mono font to Tailwind v4 utilities
+   (bg-primary, text-foreground, border-border, font-mono, etc.) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-default: var(--radius);
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── CI/CV design tokens ── */
+:root {
+  --g: #2ecc71; /* primary green */
+  --gb: #5ef09a; /* bright green — headings, scores */
+  --gd: #1a8c4a; /* dark green — accents, borders */
+  --gm: rgba(46, 204, 113, 0.45); /* muted — body text */
+  --gx: rgba(46, 204, 113, 0.12); /* ghost — borders, dividers */
+  --gxx: rgba(46, 204, 113, 0.06); /* whisper — subtle fills */
+  --bg: #060d06; /* page background */
+  --bg2: #080f08; /* panel background */
+  --bg3: #0c140c; /* raised surface (terminal bar) */
+  --rd: #e74c3c; /* red — errors, high flags */
+  --am: #e67e22; /* amber — warnings, medium flags */
+}
+
+/* ── Base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--g);
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* ── shadcn component overrides ── */
+
+/* Button — terminal style */
+[data-slot="button"] {
+  border-radius: 0 !important;
+  font-family: var(--font-mono), monospace !important;
+  letter-spacing: 0.04em;
+}
+
+/* Card — terminal panel */
+[data-slot="card"] {
+  border-radius: 0 !important;
+  background: var(--bg2) !important;
+  border-color: var(--gx) !important;
+}
+
+/* Badge */
+[data-slot="badge"] {
+  border-radius: 0 !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+/* Input / Textarea */
+input,
+textarea,
+select {
+  background: var(--bg2) !important;
+  border-color: var(--gx) !important;
+  border-radius: 0 !important;
+  color: var(--g) !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 0.7rem;
+}
+input:focus,
+textarea:focus {
+  border-color: var(--gd) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--gd) !important;
+  opacity: 0.6;
+}
+
+/* Separator */
+[data-slot="separator"] {
+  background: var(--gx) !important;
+}
+
+/* ── Utility classes ── */
+
+/* Score colours */
+.score-high {
+  color: var(--g);
+} /* 75–100 */
+.score-mid {
+  color: var(--am);
+} /* 50–74  */
+.score-low {
+  color: var(--rd);
+} /* 0–49   */
+
+/* Flag severity */
+.flag-high {
+  color: var(--rd);
+}
+.flag-medium {
+  color: var(--am);
+}
+.flag-low {
+  color: var(--g);
+}
+
+/* Text tones */
+.dim {
+  color: var(--gm);
+}
+.bright {
+  color: var(--gb);
+}
+.faint {
+  color: var(--gd);
+}
+
+/* Terminal prompt prefix */
+.prompt::before {
+  content: "> ";
+  color: var(--g);
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--g);
+  vertical-align: middle;
+  animation: blink 0.75s step-end infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Pipeline status dot */
+.status-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
