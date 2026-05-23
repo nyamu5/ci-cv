@@ -31,14 +31,20 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
   const row = await fetchRow(id);
   if (!row) return { title: "Not found · Resume Roast" };
+
+  let title = "CV Analysis · Resume Roast";
+  let description = "Brutally honest AI feedback on your CV.";
   if (row.status === "complete" && row.result) {
     const r = row.result as Analysis;
-    return {
-      title: `CV Analysis — Score: ${r.overall_score}/100`,
-      description: r.summary,
-    };
+    title = `CV Analysis — Score: ${r.overall_score}/100`;
+    description = r.summary;
   }
-  return { title: "CV Analysis · Resume Roast" };
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "article" },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export default async function AnalysisPage({ params }: Params) {
