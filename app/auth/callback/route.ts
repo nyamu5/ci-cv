@@ -1,6 +1,21 @@
-// TODO: implement in Ticket 1.4 — exchange OAuth code for a Supabase session.
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
-export async function GET() {
-  return NextResponse.redirect(new URL("/login", "http://localhost"));
+export async function GET(request: NextRequest) {
+  const { searchParams, origin } = request.nextUrl;
+  const code = searchParams.get("code");
+  const next = searchParams.get("next") ?? "/dashboard";
+
+  if (!code) {
+    return NextResponse.redirect(`${origin}/login?error=auth`);
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+  if (error) {
+    return NextResponse.redirect(`${origin}/login?error=auth`);
+  }
+
+  return NextResponse.redirect(`${origin}${next}`);
 }

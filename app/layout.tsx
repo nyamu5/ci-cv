@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import { Nav } from "@/components/nav";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const mono = JetBrains_Mono({
@@ -20,7 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${mono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Nav />
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
