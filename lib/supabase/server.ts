@@ -1,2 +1,37 @@
-// TODO: implement in Ticket 1.3 — server Supabase client + getSession() helper.
-export {};
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { env } from "@/lib/env";
+
+export async function createClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            for (const { name, value, options } of cookiesToSet) {
+              cookieStore.set(name, value, options);
+            }
+          } catch {
+            // Called from a Server Component — cookie writes happen via
+            // middleware. Safe to ignore here.
+          }
+        },
+      },
+    },
+  );
+}
+
+export async function getSession() {
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return session;
+}

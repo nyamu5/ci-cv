@@ -40,7 +40,7 @@ Both calls are traced via LangSmith — the OpenAI client is wrapped with the `l
 
 **Persistence.** Single `analyses` table (Drizzle, `lib/db/schema.ts`) with a `pgEnum` status (`pending` | `processing` | `complete` | `failed`), nullable `user_id` (anonymous analyses allowed), `cv_text`, `jd_text`, `target_role`, `result jsonb`, `cost_usd numeric(10,6)`, timestamps. The Trigger task is the only writer for status transitions after insert.
 
-**Auth.** Supabase SSR (`@supabase/ssr`) with browser/server client split (`lib/supabase/{client,server}.ts`). `middleware.ts` refreshes the session on every request and gates `/dashboard`. OAuth providers (Google + GitHub) are configured in the Supabase dashboard, not in code.
+**Auth.** Supabase SSR (`@supabase/ssr`) with browser/server client split (`lib/supabase/{client,server}.ts`). `proxy.ts` at the project root refreshes the session on every request and gates `/dashboard`. (Next 16 renamed `middleware.ts` → `proxy.ts` and the exported function from `middleware` → `proxy`; the spec/tickets still say "middleware".) OAuth providers (Google + GitHub) are configured in the Supabase dashboard, not in code.
 
 **Rate limiting** (`lib/rate-limit.ts`). Upstash sliding window: anonymous 5/24h keyed by IP (`anon:{ip}`), authenticated 20/24h keyed by user id (`user:{id}`). **Fail open** if Redis is unreachable — log a warning, never block a user because the limiter is down.
 
