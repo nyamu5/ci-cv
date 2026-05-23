@@ -7,8 +7,9 @@ const EnvSchema = z.object({
   OPENAI_API_KEY: z.string().min(1),
   LANGSMITH_API_KEY: z.string().min(1),
   LANGSMITH_PROJECT: z.string().min(1),
-  UPSTASH_REDIS_REST_URL: z.string().url(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+  // Optional: rate-limit fails open if either is missing or empty.
+  UPSTASH_REDIS_REST_URL: z.string().url().optional().or(z.literal("")),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional().or(z.literal("")),
   TRIGGER_SECRET_KEY: z.string().min(1),
   DATABASE_URL: z.string().url(),
 });
