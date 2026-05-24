@@ -31,9 +31,9 @@ async function fetchRow(id: string) {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
   const row = await fetchRow(id);
-  if (!row) return { title: "Not found · Resume Roast" };
+  if (!row) return { title: "Not found · ci/cv" };
 
-  let title = "CV Analysis · Resume Roast";
+  let title = "CV Analysis · ci/cv";
   let description = "Brutally honest AI feedback on your CV.";
   if (row.status === "complete" && row.result) {
     const r = row.result as Analysis;

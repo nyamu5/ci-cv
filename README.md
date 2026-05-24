@@ -1,4 +1,4 @@
-# Resume Roast 🔥
+# ci/cv 🔥
 
 Brutally honest, scored AI feedback on your CV — paste it, upload a PDF, or pair it with a job description for keyword-match scoring. Built as a CI/CD-pipeline metaphor: cheap gatekeeper pass, then full analyser pass, all observable in LangSmith.
 
@@ -71,8 +71,8 @@ A vision-based pipeline (render PDF page → call `gpt-4o` on the image) would g
 
 ```bash
 # 1. clone + install
-git clone https://github.com/nyamu5/resume-roast.git
-cd resume-roast
+git clone https://github.com/nyamu5/ci-cv.git
+cd ci-cv
 pnpm install
 
 # 2. env

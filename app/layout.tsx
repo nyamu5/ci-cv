@@ -12,7 +12,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Resume Roast",
+  title: "ci/cv",
   description: "Brutally honest AI feedback on your CV.",
 };
 

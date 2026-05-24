@@ -7,7 +7,7 @@ import type { AnalysisResult as Analysis } from "@/lib/validations";
 // ImageResponse runs fine on Node and we want access to the pg pool.
 
 export const size = { width: 1200, height: 630 };
-export const alt = "Resume Roast — CV analysis";
+export const alt = "ci/cv — CV analysis";
 export const contentType = "image/png";
 
 const C = {
@@ -73,7 +73,7 @@ export default async function OpengraphImage({
             fontWeight: 700,
           }}
         >
-          {"> RESUME-ROAST 🔥"}
+          {"> CI/CV 🔥"}
         </span>
         <span style={{ fontSize: 16, color: C.greenDim, letterSpacing: 3 }}>
           job_{id.slice(0, 6)}
@@ -156,7 +156,7 @@ export default async function OpengraphImage({
           letterSpacing: 3,
         }}
       >
-        <span>resume-roast</span>
+        <span>ci/cv</span>
         <span>brutally honest CV feedback</span>
       </div>
     </div>,

@@ -16,7 +16,7 @@ export async function Nav() {
         className="font-mono tracking-widest text-xs"
         style={{ color: "var(--gb)" }}
       >
-        &gt; resume-roast 🔥
+        &gt; ci/cv 🔥
       </Link>
       <div className="flex items-center gap-3 text-xs font-mono">
         {email ? (

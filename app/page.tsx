@@ -9,7 +9,7 @@ export default function Home() {
           className="font-mono text-xs tracking-widest"
           style={{ color: "var(--gd)" }}
         >
-          $ resume-roast init
+          $ ci/cv init
         </p>
         <h1
           className="font-mono text-3xl md:text-5xl leading-tight tracking-tight"
