@@ -2,7 +2,7 @@
 
 Brutally honest, scored AI feedback on your CV — paste it, upload a PDF, or pair it with a job description for keyword-match scoring. Built as a CI/CD-pipeline metaphor: cheap gatekeeper pass, then full analyser pass, all observable in LangSmith.
 
-> **Live demo:** _coming soon_ · **Screenshot:** _coming soon_
+> **Live demo:** https://ci-cv-production.up.railway.app · **Screenshot:** _coming soon_
 
 ---
 
