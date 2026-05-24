@@ -59,7 +59,9 @@ for (let i = 0; i < 45; i++) {
   const row = rows[0];
   const status = row?.status ?? "missing";
   if (status !== lastStatus) {
-    console.log(`  t+${i * 2}s  status=${status}  cost=${row?.cost_usd ?? "-"}`);
+    console.log(
+      `  t+${i * 2}s  status=${status}  cost=${row?.cost_usd ?? "-"}`,
+    );
     lastStatus = status;
   }
   if (status === "complete" || status === "failed") break;

@@ -22,6 +22,7 @@ export function CvInputForm() {
   const [tab, setTab] = useState<TabId>("paste");
   const [uploading, setUploading] = useState(false);
   const [qualityWarning, setQualityWarning] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const form = useForm({
     defaultValues: { cv_text: "", jd_text: "", target_role: "" },
@@ -39,9 +40,7 @@ export function CvInputForm() {
 
       if (res.status === 429) {
         const { resetAt } = await res.json();
-        const when = resetAt
-          ? new Date(resetAt).toLocaleTimeString()
-          : "later";
+        const when = resetAt ? new Date(resetAt).toLocaleTimeString() : "later";
         toast.error(`Rate limit reached. Try again at ${when}.`);
         return;
       }
@@ -57,20 +56,21 @@ export function CvInputForm() {
   async function handleFile(file: File) {
     setUploading(true);
     setQualityWarning(false);
+    setUploadError(null);
     try {
       const fd = new FormData();
       fd.append("pdf", file);
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error ?? "Upload failed.");
+        setUploadError(data.error ?? "Upload failed.");
         return;
       }
       form.setFieldValue("cv_text", data.text);
       setQualityWarning(Boolean(data.qualityWarning));
       if (!data.qualityWarning) setTab("paste");
     } catch {
-      toast.error("Upload failed.");
+      setUploadError("Upload failed. Check your network and try again.");
     } finally {
       setUploading(false);
     }
@@ -126,12 +126,16 @@ export function CvInputForm() {
             <Alert variant="default" className="mb-3">
               <AlertDescription>
                 Text extraction looks low quality (multi-column layout, custom
-                fonts, or image-only CV). Switch to the Paste tab and paste
-                your CV directly for best results.
+                fonts, or image-only CV). Switch to the Paste tab and paste your
+                CV directly for best results.
               </AlertDescription>
             </Alert>
           )}
-          <FileDropZone onFile={handleFile} disabled={uploading} />
+          <FileDropZone
+            onFile={handleFile}
+            disabled={uploading}
+            error={uploadError}
+          />
         </TabsContent>
 
         <TabsContent value="jd" className="mt-3">
@@ -220,51 +224,55 @@ export function CvInputForm() {
 function FileDropZone({
   onFile,
   disabled,
+  error,
 }: {
   onFile: (f: File) => void;
   disabled: boolean;
+  error: string | null;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onDragOver={(e) => {
-        e.preventDefault();
-        if (!disabled) setDragging(true);
-      }}
-      onDragLeave={() => setDragging(false)}
-      onDrop={(e) => {
-        e.preventDefault();
-        setDragging(false);
-        if (disabled) return;
-        const file = e.dataTransfer.files[0];
-        if (file) onFile(file);
-      }}
-      onClick={() => !disabled && inputRef.current?.click()}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+    <div>
+      <button
+        type="button"
+        disabled={disabled}
+        onDragOver={(e) => {
           e.preventDefault();
-          if (!disabled) inputRef.current?.click();
-        }
-      }}
-      className="border border-dashed p-8 text-center cursor-pointer text-xs font-mono select-none"
-      style={{
-        borderColor: dragging ? "var(--g)" : "var(--gx)",
-        background: dragging ? "var(--gxx)" : "transparent",
-        color: "var(--gm)",
-        opacity: disabled ? 0.6 : 1,
-      }}
-    >
-      {disabled
-        ? "uploading…"
-        : "drop a PDF here, or click to pick one (max 5MB)"}
+          if (!disabled) setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          if (disabled) return;
+          const file = e.dataTransfer.files[0];
+          if (file) onFile(file);
+        }}
+        onClick={() => !disabled && inputRef.current?.click()}
+        className="w-full border border-dashed p-8 text-center text-xs font-mono select-none"
+        style={{
+          borderColor: error
+            ? "var(--rd)"
+            : dragging
+              ? "var(--g)"
+              : "var(--gx)",
+          background: dragging ? "var(--gxx)" : "transparent",
+          color: "var(--gm)",
+          opacity: disabled ? 0.6 : 1,
+          cursor: disabled ? "not-allowed" : "pointer",
+        }}
+      >
+        {disabled
+          ? "uploading…"
+          : "drop a PDF here, or click to pick one (max 5MB)"}
+      </button>
       <input
         ref={inputRef}
         type="file"
         accept="application/pdf"
+        aria-label="PDF file"
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
@@ -272,6 +280,15 @@ function FileDropZone({
           e.target.value = "";
         }}
       />
+      {error && (
+        <p
+          role="alert"
+          className="mt-2 text-[11px] font-mono"
+          style={{ color: "var(--rd)" }}
+        >
+          [error] {error}
+        </p>
+      )}
     </div>
   );
 }

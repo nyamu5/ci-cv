@@ -21,10 +21,7 @@ export default async function LoginPage({ searchParams }: Props) {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {error === "auth" && (
-            <p
-              className="text-[11px] font-mono"
-              style={{ color: "var(--rd)" }}
-            >
+            <p className="text-[11px] font-mono" style={{ color: "var(--rd)" }}>
               [auth_failed] Could not complete sign-in. Try again.
             </p>
           )}

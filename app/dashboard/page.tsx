@@ -61,10 +61,7 @@ export default async function DashboardPage() {
           style={{ borderColor: "var(--gx)", background: "var(--bg2)" }}
         >
           <p className="text-[12px] dim mb-3">no analyses yet.</p>
-          <Link
-            href="/"
-            className={buttonVariants({ variant: "outline" })}
-          >
+          <Link href="/" className={buttonVariants({ variant: "outline" })}>
             start one
           </Link>
         </div>

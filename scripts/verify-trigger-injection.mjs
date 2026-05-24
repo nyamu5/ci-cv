@@ -33,10 +33,9 @@ console.log("runId:", handle.id);
 
 let lastStatus = "";
 for (let i = 0; i < 30; i++) {
-  const { rows } = await c.query(
-    "SELECT status FROM analyses WHERE id=$1",
-    [analysisId],
-  );
+  const { rows } = await c.query("SELECT status FROM analyses WHERE id=$1", [
+    analysisId,
+  ]);
   const s = rows[0]?.status ?? "missing";
   if (s !== lastStatus) {
     console.log(`  t+${i * 2}s  status=${s}`);

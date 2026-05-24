@@ -21,6 +21,7 @@ export async function GET(_request: NextRequest, { params }: Params) {
 
   return NextResponse.json({
     status: row.status,
-    result: row.status === "complete" || row.status === "failed" ? row.result : null,
+    result:
+      row.status === "complete" || row.status === "failed" ? row.result : null,
   });
 }

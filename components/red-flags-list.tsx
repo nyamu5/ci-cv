@@ -42,11 +42,9 @@ export function RedFlagsList({
   );
   return (
     <div className="flex flex-col gap-2">
-      {sorted.map((flag, i) => (
+      {sorted.map((flag) => (
         <div
-          // index-based key is acceptable here — order is stable per render
-          // and these aren't reorderable in the UI
-          key={`${flag.severity}-${i}-${flag.issue.slice(0, 16)}`}
+          key={`${flag.severity}:${flag.issue}`}
           className="border p-3 flex items-start gap-3"
           style={{ borderColor: "var(--gx)", background: "var(--bg2)" }}
         >

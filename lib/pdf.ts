@@ -44,7 +44,9 @@ export function isLikelyGarbled(text: string): boolean {
   return ratio < 0.6 || avgWordLength > 15;
 }
 
-export async function extractTextFromPDF(buffer: Buffer): Promise<ExtractedPDF> {
+export async function extractTextFromPDF(
+  buffer: Buffer,
+): Promise<ExtractedPDF> {
   const parser = new PDFParse({ data: buffer });
   try {
     const result = await parser.getText();

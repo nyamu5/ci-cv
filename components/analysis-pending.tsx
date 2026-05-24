@@ -82,10 +82,7 @@ export function AnalysisPending({
         >
           {bar}
         </pre>
-        <p
-          className="font-mono text-[11px]"
-          style={{ color: "var(--gb)" }}
-        >
+        <p className="font-mono text-[11px]" style={{ color: "var(--gb)" }}>
           [{status}] {ROTATING_MESSAGES[messageIdx]}
           <span className="cursor ml-1" />
         </p>

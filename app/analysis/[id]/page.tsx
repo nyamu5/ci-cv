@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AnalysisPending } from "@/components/analysis-pending";
 import { AnalysisResult } from "@/components/analysis-result";
+import { RetryButton } from "@/components/retry-button";
 import { buttonVariants } from "@/components/ui/button";
 import { analyses, db } from "@/lib/db";
 import type { AnalysisResult as Analysis } from "@/lib/validations";
@@ -66,6 +67,13 @@ export default async function AnalysisPage({ params }: Params) {
       reason: "Unknown failure",
     }) as FailureResult;
     const isInjection = failure.error === "gatekeeper_rejected";
+    // Surface the rejection reason verbatim for gatekeeper outcomes (they're
+    // already short and user-friendly: "not a CV", "injection attempt
+    // detected"). For task_failed we replace technical errors with a generic
+    // message — the real reason is still in the DB for log inspection.
+    const displayReason = isInjection
+      ? failure.reason
+      : "Something went wrong while running the analysis. The error has been logged. Retrying usually fixes transient issues like network blips.";
     return (
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div
@@ -78,15 +86,23 @@ export default async function AnalysisPage({ params }: Params) {
           >
             &gt; [{isInjection ? "rejected" : "failed"}]
           </h1>
-          <p className="text-[12px] leading-relaxed" style={{ color: "var(--g)" }}>
-            {failure.reason}
-          </p>
-          <Link
-            href="/"
-            className={`${buttonVariants({ variant: "outline" })} self-start`}
+          <p
+            className="text-[12px] leading-relaxed"
+            style={{ color: "var(--g)" }}
           >
-            try again
-          </Link>
+            {displayReason}
+          </p>
+          <div className="flex gap-2">
+            {!isInjection && <RetryButton analysisId={id} />}
+            <Link
+              href="/"
+              className={buttonVariants({
+                variant: isInjection ? "outline" : "ghost",
+              })}
+            >
+              {isInjection ? "edit and try again" : "home"}
+            </Link>
+          </div>
         </div>
       </main>
     );

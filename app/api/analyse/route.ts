@@ -14,7 +14,10 @@ import type { runAnalysis } from "@/trigger/run-analysis";
 function lightSanitize(text: string): string {
   return text
     .replace(/ignore\s+(all\s+)?previous\s+instructions/gi, "[redacted]")
-    .replace(/disregard\s+(all\s+)?prior\s+(instructions|context)/gi, "[redacted]")
+    .replace(
+      /disregard\s+(all\s+)?prior\s+(instructions|context)/gi,
+      "[redacted]",
+    )
     .replace(/you\s+are\s+now\s+/gi, "[redacted] ");
 }
 
@@ -24,10 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json(
-      { error: "invalid_json" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
   const parsed = AnalyseRequestSchema.safeParse(body);
   if (!parsed.success) {

@@ -82,7 +82,10 @@ export async function gatekeeperCheck(cvText: string): Promise<{
 
   const raw = completion.choices[0]?.message.content;
   if (!raw) {
-    throw new AIValidationError("Gatekeeper returned empty content", completion);
+    throw new AIValidationError(
+      "Gatekeeper returned empty content",
+      completion,
+    );
   }
 
   let parsed: unknown;
@@ -180,7 +183,9 @@ function buildAnalyserUserMessage(args: {
     parts.push(`Target role: ${args.targetRole}.`);
   }
   if (args.jdText) {
-    parts.push(`Job description follows. Use it for the jd_match block.\n---JD---\n${args.jdText}\n---END JD---`);
+    parts.push(
+      `Job description follows. Use it for the jd_match block.\n---JD---\n${args.jdText}\n---END JD---`,
+    );
   } else {
     parts.push("No job description provided — set jd_match to null.");
   }

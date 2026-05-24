@@ -32,10 +32,7 @@ export function RewriteSuggestions({
           >
             {r.original}
           </p>
-          <p
-            className="text-[10px] mt-1 italic"
-            style={{ color: "var(--gd)" }}
-          >
+          <p className="text-[10px] mt-1 italic" style={{ color: "var(--gd)" }}>
             → {r.reason}
           </p>
           <div className="mt-3 flex flex-col gap-2">
