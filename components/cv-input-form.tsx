@@ -108,6 +108,7 @@ export function CvInputForm() {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="paste your CV text here — 200 to 15,000 chars…"
+                  className="max-h-[28rem] overflow-y-auto"
                 />
                 <p
                   className="text-[10px] mt-1 font-mono"
@@ -156,6 +157,7 @@ export function CvInputForm() {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="paste the job description (optional)…"
+                  className="max-h-[22rem] overflow-y-auto"
                 />
                 <p
                   className="text-[10px] mt-1 font-mono"

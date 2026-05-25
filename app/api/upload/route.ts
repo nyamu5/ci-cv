@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const result = await extractTextFromPDF(buffer);
     return NextResponse.json(result);
-  } catch {
+  } catch (err) {
+    console.error("[api/upload] pdf parse failed:", err);
     return NextResponse.json({ error: "Failed to parse PDF" }, { status: 500 });
   }
 }
